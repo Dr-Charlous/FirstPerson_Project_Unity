@@ -3,14 +3,22 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ScriptableObjects",menuName = "Objetcs")]
 public class ObjectInfos : ScriptableObject
 {
-    public int Damage;
-    public int Munitions;
-    public float Speed;
-    public WeaponType Type;
+    public ObjectType Type;
 
-    public enum WeaponType
+    public enum ObjectType
     {
-        Sword,
-        Gun
+        Key,
+        Tool,
+        Change
+    }
+
+    public ObjectSubType SubType;
+
+    public enum ObjectSubType
+    {
+        Fuse,
+        Pipe,
+        Fuel,
+        Other
     }
 }
