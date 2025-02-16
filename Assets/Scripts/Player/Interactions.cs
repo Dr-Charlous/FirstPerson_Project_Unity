@@ -29,7 +29,7 @@ public class Interactions : MonoBehaviour
         Vector3 origin = transform.position;
         Debug.DrawLine(origin, origin + transform.TransformDirection(Vector3.forward) * _distance);
 
-        if (!GameManager.Instance.Player.Look.IsOnHead)
+        if (!PlayerComponentManager.Instance.Look.IsOnHead)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 

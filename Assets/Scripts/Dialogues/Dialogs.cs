@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Dialogs : ScriptableObject
 {
     [Tooltip("Character speaking")] public Characters Character;
-    [TextArea()] public string Dialogue;
+    [TextArea(10,10)] public string Dialogue;
     [Tooltip("Next dialogue")] public Dialogs NextDialogue;
 
     public void UpdateDialog(TextMeshProUGUI textComponentName, TextMeshProUGUI textComponent)
