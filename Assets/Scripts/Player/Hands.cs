@@ -1,6 +1,18 @@
 using System;
 using UnityEngine;
 
+[Serializable]
+public class Hand
+{
+    [Header("Arm/Hand :")]
+    public Transform HandTransformTarget;
+    public Transform ArmMeshTransform;
+
+    [Header("Object :")]
+    public Transform HandTransformObjectPlacement;
+    public GameObject ObjectInHand = null;
+}
+
 public class Hands : MonoBehaviour
 {
     [SerializeField] Hand[] _hands;
@@ -25,20 +37,19 @@ public class Hands : MonoBehaviour
         return _hands[handNumber].ObjectInHand;
     }
 
+    public Transform GetHandObjectTransform(int handNumber)
+    {
+        return _hands[handNumber].HandTransformObjectPlacement;
+    }
+
+    public void LoseObjectInHand(int handNumber)
+    {
+        _hands[handNumber].ObjectInHand = null;
+    }
+
     public void DestroyObjectInHand(int handNumber)
     {
         Destroy(_hands[handNumber].ObjectInHand);
         _hands[handNumber].ObjectInHand = null;
     }
-}
-
-[Serializable]
-public class Hand
-{
-    public Transform HandTransformTarget;
-    public Transform ArmMeshTransform;
-
-    [Header("Object :")]
-    public GameObject ObjectInHand = null;
-    public Transform HandTransformObjectPlacement;
 }

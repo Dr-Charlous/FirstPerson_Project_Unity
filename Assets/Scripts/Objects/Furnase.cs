@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Furnase : MonoBehaviour
 {
+    public FurnaseInteraction FurnaseInt = new FurnaseInteraction();
     public float TimerTarget = 0;
     public bool IsInfinit = false;
     public bool IsBreak = false;

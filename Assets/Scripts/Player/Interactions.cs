@@ -2,21 +2,27 @@ using UnityEngine;
 
 public class Interactions : MonoBehaviour
 {
+    [Header("Parameters :")]
     [SerializeField] float _distance;
     [SerializeField] LayerMask _interactions;
     [SerializeField] GameObject _uiText;
     [SerializeField] Transform _obj;
 
+    [Header("Inputs :")]
+    [SerializeField] KeyCode _interact;
+    [SerializeField] KeyCode _eject;
+
+    [Header("Hands :")]
     public Hands Hands;
 
     private void Update()
     {
         RaycastHit hit;
 
-        if (Input.GetKeyDown(KeyCode.Q) && Hands.GetObjectInHand(0) != null)
+        if (Input.GetKeyDown(_eject) && Hands.GetObjectInHand(0) != null)
         {
             Hands.GetObjectInHand(0).GetComponent<ObjectsComponents>().Grab(null);
-            Hands.DestroyObjectInHand(0);
+            Hands.LoseObjectInHand(0);
         }
 
         //Origin point of ray
@@ -33,7 +39,7 @@ public class Interactions : MonoBehaviour
                 //Debug.Log(hit.point);
                 _obj.position = hit.point;
 
-                if (Input.GetKeyDown(KeyCode.Mouse0))
+                if (Input.GetKeyDown(_interact))
                 {
                     //Interactibles
                     var inter = hit.transform.GetComponent<Interactible>();
@@ -59,60 +65,27 @@ public class Interactions : MonoBehaviour
                 if (_uiText != null)
                     _uiText.SetActive(true);
 
-                if (Input.GetKeyDown(KeyCode.E))
+                if (Input.GetKeyDown(_interact))
                 {
                     //Doors
                     var door = hit.transform.GetComponent<Doors>();
-
                     if (door != null)
-                    {
-                        //var objComp = Hands[0].ObjectInHand.GetComponent<ObjectsComponents>();
-
-                        //if (objComp != null && door.IsLocked)
-                        //    door.IsLocked = !objComp.Use();
-
-                        if (!door.IsLocked)
-                            door.ChangeTarget();
-                        else
-                            Debug.Log("Door close");
-                    }
+                        door.DoorInt.OnAction(door, Hands);
 
                     //Objects
                     var obj = hit.transform.GetComponent<ObjectsComponents>();
-
-                    if (obj != null && Hands.GetObjectInHand(0) == null)
-                    {
-                        obj.Grab(Hands.GetObjectInHand(0).transform);
-                        Hands.SetObjectInHand(0, obj.gameObject);
-                    }
+                    if (obj != null)
+                        obj.ObjInt.OnAction(obj, Hands);
 
                     //Objects placement
-                    var placement = hit.transform.GetComponent<ObjectPlacement>();
-
-                    if (placement != null && Hands.GetObjectInHand(0) != null)
-                    {
-                        var objComp = Hands.GetObjectInHand(0).GetComponent<ObjectsComponents>();
-
-                        if (!placement.IsReplace && objComp.ObjectInfos.Type == ObjectInfos.ObjectType.Change && objComp.ObjectInfos.SubType == placement.SubType)
-                        {
-                            placement.IsReplace = objComp.Use();
-                            Hands.DestroyObjectInHand(0);
-
-                            placement.Repair();
-                        }
-                        else
-                            Debug.Log("Not the right one or not brake yet");
-                    }
+                    var place = hit.transform.GetComponent<ObjectPlacement>();
+                    if (place != null)
+                        place.PlacementInt.OnAction(place, Hands);
 
                     //Furnase
                     var furnase = hit.transform.GetComponent<Furnase>();
-
-                    if (furnase != null && Hands.GetObjectInHand(0) != null)
-                    {
-                        furnase.Repair(Hands.GetObjectInHand(0).GetComponent<Fuel>());
-
-                        Hands.DestroyObjectInHand(0);
-                    }
+                    if (furnase != null)
+                        furnase.FurnaseInt.OnAction(furnase, Hands);
                 }
             }
             else
@@ -131,4 +104,9 @@ public class Interactions : MonoBehaviour
 
     //    Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.forward) * _distance);
     //}
+}
+
+public interface IInteraction
+{
+    public void OnAction(MonoBehaviour script, Hands hands);
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ObjectsComponents : MonoBehaviour
 {
+    public ObjectInteraction ObjInt = new ObjectInteraction();
     public ObjectInfos ObjectInfos;
 
     Transform _originalParent;

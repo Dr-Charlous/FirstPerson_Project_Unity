@@ -6,6 +6,7 @@ public class Doors : MonoBehaviour
 {
     public bool IsLocked = false;
     public bool IsAutoClose = true;
+    public DoorInteraction DoorInt = new DoorInteraction();
 
     [SerializeField] Transform _door;
     [SerializeField] Vector3 _openPos;
