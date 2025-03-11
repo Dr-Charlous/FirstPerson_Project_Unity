@@ -28,15 +28,15 @@ public class DialogueManager : MonoBehaviour
             if (_timer < _timerValue)
                 _timer += Time.deltaTime;
 
-            if (_timer >= _timerValue && Input.GetMouseButtonDown(0))      //Input next line
+            if (_timer >= _timerValue/* && Input.GetMouseButtonDown(0)*/)      //Input next line
             {
                 NextDialogue();
             }
         }
-        else if (Input.GetMouseButtonDown(1))     //Input exemple call dialog
-        {
-            UpdateDialogue(_dialogue);
-        }
+        //else if (Input.GetMouseButtonDown(1))     //Input exemple call dialog
+        //{
+        //    UpdateDialogue(_dialogue);
+        //}
     }
 
     //Next line

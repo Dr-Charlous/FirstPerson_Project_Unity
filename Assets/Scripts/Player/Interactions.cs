@@ -8,18 +8,20 @@ public class Interactions : MonoBehaviour
     [SerializeField] GameObject _uiText;
     [SerializeField] Transform _obj;
 
-    [Header("Inputs :")]
-    [SerializeField] KeyCode _interact;
-    [SerializeField] KeyCode _eject;
-
     [Header("Hands :")]
     public Hands Hands;
 
     private void Update()
     {
+        if (GameManager.Instance != null && GameManager.Instance.IsGamePause)
+            return;
+
+        if (PlayerComponentManager.Instance.Stats.IsDead)
+            return;
+
         RaycastHit hit;
 
-        if (Input.GetKeyDown(_eject) && Hands.GetObjectInHand(0) != null)
+        if (PlayerComponentManager.Instance.PlayerInputs.Player.Eject.triggered && Hands.GetObjectInHand(0) != null)
         {
             Hands.GetObjectInHand(0).GetComponent<ObjectsComponents>().Grab(null);
             Hands.LoseObjectInHand(0);
@@ -39,53 +41,63 @@ public class Interactions : MonoBehaviour
                 //Debug.Log(hit.point);
                 _obj.position = hit.point;
 
-                if (Input.GetKeyDown(_interact))
+                if (PlayerComponentManager.Instance.PlayerInputs.Player.Interact.triggered)
                 {
-                    //Interactibles
+                    //Interactibles/Radio/Panel
                     var inter = hit.transform.GetComponent<Interactible>();
+                    //var radio = hit.transform.GetComponent<Radio>();
+                    //var panel = hit.transform.GetComponent<ControlPanel>();
+                    //var bed = hit.transform.GetComponent<Bed>();
 
                     if (inter != null)
                         inter.ChangeTarget();
-
-                    //Radio
-                    var radio = hit.transform.GetComponent<Radio>();
-
-                    if (radio != null)
-                        radio.ChangeTarget();
+                    //else if (radio != null)
+                    //    radio.ChangeTarget();
+                    //else if (panel != null)
+                    //    panel.PanelInt.OnAction(panel, Hands);
+                    //else if (bed != null)
+                    //    bed.PanelInt.OnAction(bed, Hands);
                 }
             }
+
+            if (_uiText != null)
+                _uiText.SetActive(false);
         }
         else
         {
             _obj.gameObject.SetActive(false);
 
             //Ray
-            if (Physics.Raycast(origin, transform.forward, out hit, _distance, _interactions) && GameManager.Instance.Player.Look.IsOnHead)
+            if (Physics.Raycast(origin, transform.forward, out hit, _distance, _interactions) && PlayerComponentManager.Instance.Look.IsOnHead)
             {
                 if (_uiText != null)
                     _uiText.SetActive(true);
 
-                if (Input.GetKeyDown(_interact))
+                if (PlayerComponentManager.Instance.PlayerInputs.Player.Interact.triggered)
                 {
-                    //Doors
-                    var door = hit.transform.GetComponent<Doors>();
-                    if (door != null)
-                        door.DoorInt.OnAction(door, Hands);
-
-                    //Objects
+                    //Doors/Objects/Objects placement/Furnase/Panel
+                    //var door = hit.transform.GetComponent<Doors>();
                     var obj = hit.transform.GetComponent<ObjectsComponents>();
+                    var place = hit.transform.GetComponent<ObjectPlacement>();
+                    //var furnase = hit.transform.GetComponent<Furnase>();
+                    //var panel = hit.transform.GetComponent<ControlPanel>();
+                    //var bed = hit.transform.GetComponent<Bed>();
+                    var interact = hit.transform.GetComponent<Interactible>();
+
+                    //if (door != null)
+                    //    door.DoorInt.OnAction(door, Hands);
                     if (obj != null)
                         obj.ObjInt.OnAction(obj, Hands);
-
-                    //Objects placement
-                    var place = hit.transform.GetComponent<ObjectPlacement>();
-                    if (place != null)
+                    else if (place != null)
                         place.PlacementInt.OnAction(place, Hands);
-
-                    //Furnase
-                    var furnase = hit.transform.GetComponent<Furnase>();
-                    if (furnase != null)
-                        furnase.FurnaseInt.OnAction(furnase, Hands);
+                    //else if (furnase != null)
+                    //    furnase.FurnaseInt.OnAction(furnase, Hands);
+                    //else if (panel != null)
+                    //    panel.PanelInt.OnAction(panel, Hands);
+                    //else if (bed != null)
+                    //    bed.PanelInt.OnAction(bed, Hands);
+                    else if (interact != null && interact.IsActivableOut)
+                        interact.ChangeTarget();
                 }
             }
             else

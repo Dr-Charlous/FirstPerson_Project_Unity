@@ -3,12 +3,13 @@ using UnityEngine;
 public class ObjectPlacement : MonoBehaviour
 {
     public PlacementInteraction PlacementInt = new PlacementInteraction();
-    public ObjectInfos.ObjectSubType SubType; 
+    public ObjectInfos.ObjectSubType SubType;
     public bool IsReplace = true;
     public bool IsBreak = false;
+    public bool IsMeshDisplayOnRepair = true;
 
     [SerializeField] float _breakTimer = 60f;
-    [SerializeField] [Tooltip("Min/Max range random")] Vector2 _breakTimerRandomRange = new Vector2(-10, 10);
+    [SerializeField][Tooltip("Min/Max range random")] Vector2 _breakTimerRandomRange = new Vector2(-10, 10);
     [SerializeField] GameObject _objectMeshReference;
     [SerializeField] GameObject _particuleEffect;
 
@@ -17,7 +18,7 @@ public class ObjectPlacement : MonoBehaviour
 
     private void Start()
     {
-        if (SubType == ObjectInfos.ObjectSubType.Fuse || SubType == ObjectInfos.ObjectSubType.Pipe)
+        if (SubType == ObjectInfos.ObjectSubType.Fuse || SubType == ObjectInfos.ObjectSubType.Pipe || SubType == ObjectInfos.ObjectSubType.Rod)
             BreakTypeStart();
 
         if (SubType == ObjectInfos.ObjectSubType.Fuel)
@@ -28,7 +29,7 @@ public class ObjectPlacement : MonoBehaviour
     {
         if (!GameManager.Instance.IsGamePause)
         {
-            if (SubType == ObjectInfos.ObjectSubType.Fuse || SubType == ObjectInfos.ObjectSubType.Pipe)
+            if (SubType == ObjectInfos.ObjectSubType.Fuse || SubType == ObjectInfos.ObjectSubType.Pipe || SubType == ObjectInfos.ObjectSubType.Rod)
                 BreakTypeUpdate();
 
             if (SubType == ObjectInfos.ObjectSubType.Fuel)
@@ -38,7 +39,7 @@ public class ObjectPlacement : MonoBehaviour
 
     public void Repair()
     {
-        if (SubType == ObjectInfos.ObjectSubType.Fuse || SubType == ObjectInfos.ObjectSubType.Pipe)
+        if (SubType == ObjectInfos.ObjectSubType.Fuse || SubType == ObjectInfos.ObjectSubType.Pipe || SubType == ObjectInfos.ObjectSubType.Rod)
             BreakRepair();
 
         if (SubType == ObjectInfos.ObjectSubType.Fuel)
@@ -48,8 +49,17 @@ public class ObjectPlacement : MonoBehaviour
     #region BreakType
     void BreakTypeStart()
     {
-        _objectMeshReference.SetActive(true);
-        _particuleEffect.SetActive(false);
+        if (IsMeshDisplayOnRepair)
+        {
+            _objectMeshReference.SetActive(true);
+            _particuleEffect.SetActive(false);
+        }
+        else
+        {
+            _objectMeshReference.SetActive(false);
+            _particuleEffect.SetActive(true);
+        }
+
         _timerTarget = _breakTimer + Random.Range(_breakTimerRandomRange.x, _breakTimerRandomRange.y);
     }
 
@@ -59,8 +69,17 @@ public class ObjectPlacement : MonoBehaviour
         {
             IsBreak = true;
             IsReplace = false;
-            _objectMeshReference.SetActive(false);
-            _particuleEffect.SetActive(true);
+
+            if (IsMeshDisplayOnRepair)
+            {
+                _objectMeshReference.SetActive(false);
+                _particuleEffect.SetActive(true);
+            }
+            else
+            {
+                _objectMeshReference.SetActive(true);
+                _particuleEffect.SetActive(false);
+            }
         }
         else
             _timer += Time.deltaTime;
@@ -72,8 +91,17 @@ public class ObjectPlacement : MonoBehaviour
         IsReplace = true;
         _timer = 0;
         _timerTarget = _breakTimer + Random.Range(_breakTimerRandomRange.x, _breakTimerRandomRange.y);
-        _objectMeshReference.SetActive(true);
-        _particuleEffect.SetActive(false);
+
+        if (IsMeshDisplayOnRepair)
+        {
+            _objectMeshReference.SetActive(true);
+            _particuleEffect.SetActive(false);
+        }
+        else
+        {
+            _objectMeshReference.SetActive(false);
+            _particuleEffect.SetActive(true);
+        }
     }
     #endregion
 

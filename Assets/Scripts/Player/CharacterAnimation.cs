@@ -21,28 +21,28 @@ public class CharacterAnimation : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.Instance.IsGamePause)
+        if (GameManager.Instance.IsGamePause || PlayerComponentManager.Instance.Stats.IsDead)
+            return;
+
+        if (_timer >= 0)
+            _timer -= Time.deltaTime;
+        else
         {
-            if (_timer >= 0)
-                _timer -= Time.deltaTime;
-            else
-            {
-                Check();
-                _timer = _speed;
-            }
-
-            if (_playerMove.IsMoving)
-            {
-                if (_playerMove.IsRunning)
-                    _speed = _valueSpeed / 2;
-                else
-                    _speed = _valueSpeed;
-
-                _headTransform.localPosition = Vector3.Lerp(_headTransform.localPosition, _headTarget, _valueLerp);
-            }
-            else
-                _headTransform.localPosition = Vector3.Lerp(_headTransform.localPosition, _headDown, 0.01f);
+            Check();
+            _timer = _speed;
         }
+
+        if (_playerMove.IsMoving)
+        {
+            if (_playerMove.IsRunning)
+                _speed = _valueSpeed / 2;
+            else
+                _speed = _valueSpeed;
+
+            _headTransform.localPosition = Vector3.Lerp(_headTransform.localPosition, _headTarget, _valueLerp);
+        }
+        else
+            _headTransform.localPosition = Vector3.Lerp(_headTransform.localPosition, _headDown, 0.01f);
     }
 
     void Check()

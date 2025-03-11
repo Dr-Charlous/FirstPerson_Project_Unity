@@ -4,6 +4,7 @@ public class PlayerComponentManager : MonoBehaviour
 {
     #region Singleton
     public static PlayerComponentManager Instance;
+    public CharaControl PlayerInputs;
 
     private void Awake()
     {
@@ -11,6 +12,18 @@ public class PlayerComponentManager : MonoBehaviour
             Instance = this;
         else
             Debug.LogError("2 PlayerComponentManagers");
+
+        PlayerInputs = new();
+    }
+
+    private void OnEnable()
+    {
+        PlayerInputs.Enable();
+    }
+
+    private void OnDisable()
+    {
+        PlayerInputs.Disable();
     }
     #endregion
 

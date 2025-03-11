@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -33,52 +34,61 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 _velocity;
     bool _isGrounded;
+    [SerializeField] Animator _animator;
 
     void Update()
     {
-        if (/*!GameManager.Instance.IsGamePause && */!PlayerComponentManager.Instance.Stats.IsDead && !IsParalysed)
+        if (GameManager.Instance != null && GameManager.Instance.IsGamePause)
+            return;
+
+        if (PlayerComponentManager.Instance.Stats.IsDead || IsParalysed)
+            return;
+
+        //Ground check
+        _isGrounded = Physics.CheckSphere(_groundCheck.position, _groundDistance, _groundMask);
+
+        if (_isGrounded && _velocity.y < 0)
         {
-            //Ground check
-            _isGrounded = Physics.CheckSphere(_groundCheck.position, _groundDistance, _groundMask);
-
-            if (_isGrounded && _velocity.y < 0)
-            {
-                _velocity.y = -2f;
-            }
-
-            //Move
-            float x = Input.GetAxis("Horizontal");
-            float z = Input.GetAxis("Vertical");
-
-            Vector3 move = transform.right * x + transform.forward * z;
-
-            if (move.magnitude > 0)
-                IsMoving = true;
-            else
-                IsMoving = false;
-
-            //Run
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                _controller.Move(move * (_speed + _runSpeed) * Time.deltaTime);
-                IsRunning = true;
-            }
-            else
-            {
-                _controller.Move(move * _speed * Time.deltaTime);
-                IsRunning = false;
-            }
-
-            //Jump
-            if (Input.GetButtonDown("Jump") && _isGrounded)
-            {
-                _velocity.y = Mathf.Sqrt(_jumpForce * -2f * _gravity);
-            }
-
-            _velocity.y += _gravity * Time.deltaTime;
-
-            _controller.Move(_velocity * Time.deltaTime);
+            _velocity.y = -2f;
         }
+
+        //Move
+        float x = PlayerComponentManager.Instance.PlayerInputs.Player.Move.ReadValue<Vector2>().x;
+        float z = PlayerComponentManager.Instance.PlayerInputs.Player.Move.ReadValue<Vector2>().y;
+
+        Vector3 move = transform.right * x + transform.forward * z;
+
+        if (move.magnitude > 0)
+            IsMoving = true;
+        else
+            IsMoving = false;
+
+        _animator.SetBool("IsWalking", IsMoving);
+
+        //Run
+        if (PlayerComponentManager.Instance.PlayerInputs.Player.Run.ReadValue<float>() != 0)
+        {
+            _controller.Move(move * (_speed + _runSpeed) * Time.deltaTime);
+            IsRunning = true;
+        }
+        else
+        {
+            _controller.Move(move * _speed * Time.deltaTime);
+            IsRunning = false;
+        }
+
+        _animator.SetBool("IsRunning", IsRunning);
+
+        //Jump
+        if (PlayerComponentManager.Instance.PlayerInputs.Player.Jump.ReadValue<float>() != 0 && _isGrounded)
+        {
+            _velocity.y = Mathf.Sqrt(_jumpForce * -2f * _gravity);
+            _animator.SetTrigger("IsJumping");
+        }
+
+        _velocity.y += _gravity * Time.deltaTime;
+
+        _controller.Move(_velocity * Time.deltaTime);
     }
 
     private void OnDrawGizmosSelected()

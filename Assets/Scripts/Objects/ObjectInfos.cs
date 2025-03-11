@@ -18,6 +18,7 @@ public class ObjectInfos : ScriptableObject
     {
         Fuse,
         Pipe,
+        Rod,
         Fuel,
         Other
     }

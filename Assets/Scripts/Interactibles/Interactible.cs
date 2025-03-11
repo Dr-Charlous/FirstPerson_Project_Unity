@@ -4,6 +4,7 @@ public class Interactible : MonoBehaviour
 {
     public GameObject ActiveObjectInteract;
     public bool IsActive = false;
+    public bool IsActivableOut = false;
 
     [SerializeField] Vector3 _openRot;
     [SerializeField] Vector3 _closeRot;

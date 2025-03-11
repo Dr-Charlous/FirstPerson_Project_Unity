@@ -18,12 +18,12 @@ public class UiManager : MonoBehaviour
     private void Start()
     {
         _uiMenu.gameObject.SetActive(false);
-        _slider.value = GameManager.Instance.Player.Look.MouseSensitivity;
+        _slider.value = PlayerComponentManager.Instance.Look.MouseSensitivity;
     }
 
     private void Update()
     {
-        if (!GameManager.Instance.Player.Stats.IsDead)
+        if (!PlayerComponentManager.Instance.Stats.IsDead)
         {
             if (!GameManager.Instance.IsGamePause)
             {
@@ -53,7 +53,7 @@ public class UiManager : MonoBehaviour
 
     void Ui()
     {
-        GameManager.Instance.Player.Look.MouseSensitivity = _slider.value;
+        PlayerComponentManager.Instance.Look.MouseSensitivity = _slider.value;
         _uiText.text = _slider.value + "/" + _slider.maxValue;
     }
 
