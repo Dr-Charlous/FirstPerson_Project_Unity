@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UiPlayer : MonoBehaviour
 {
+    [SerializeField] UiManager _manager;
     [SerializeField] Image BloodScreen;
     [SerializeField] Image DeathScreen;
 
     private void Update()
     {
-        if (!GameManager.Instance.IsGamePause)
+        if (!_manager.IsGamePause)
         {
-            BloodScreen.color = new Color(BloodScreen.color.r, BloodScreen.color.g, BloodScreen.color.b, 1-GameManager.Instance.Player.Stats.GetLife());
+            //BloodScreen.color = new Color(BloodScreen.color.r, BloodScreen.color.g, BloodScreen.color.b, 1-GameManager.Instance.Player.Stats.GetLife());
         }
     }
 

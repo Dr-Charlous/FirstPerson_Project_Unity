@@ -22,7 +22,7 @@ public class PlayerStats : MonoBehaviour
 
         if (Life <= 0)
         {
-            GameManager.Instance.Ui.UiPlayer.Dead();
+            //GameManager.Instance.Ui.UiPlayer.Dead();
             IsDead = true;
         }
     }

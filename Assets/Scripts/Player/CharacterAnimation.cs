@@ -21,7 +21,7 @@ public class CharacterAnimation : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.IsGamePause || PlayerComponentManager.Instance.Stats.IsDead)
+        if (PlayerManager.Instance.UiManager.IsGamePause || PlayerManager.Instance.Stats.IsDead)
             return;
 
         if (_timer >= 0)

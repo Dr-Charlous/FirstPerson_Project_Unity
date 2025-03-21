@@ -20,16 +20,19 @@ public class Hands : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance != null && GameManager.Instance.IsGamePause)
+        if (PlayerManager.Instance.UiManager.IsGamePause)
             return;
 
-        if (PlayerComponentManager.Instance.Stats.IsDead)
+        if (PlayerManager.Instance.Stats.IsDead)
             return;
 
         for (int i = 0; i < _hands.Length; i++)
         {
-            //_hands[i].ArmMeshTransform.position = Vector3.Lerp(_hands[i].ArmMeshTransform.position, transform.position, _lerpDelay);
-            _hands[i].ArmMeshTransform.rotation = Quaternion.Lerp(_hands[i].ArmMeshTransform.rotation, transform.rotation, _lerpDelay);
+            if (_hands[i].ArmMeshTransform != null)
+            {
+                //_hands[i].ArmMeshTransform.position = Vector3.Lerp(_hands[i].ArmMeshTransform.position, transform.position, _lerpDelay);
+                _hands[i].ArmMeshTransform.rotation = Quaternion.Lerp(_hands[i].ArmMeshTransform.rotation, transform.rotation, _lerpDelay);
+            }
         }
     }
 
@@ -37,7 +40,7 @@ public class Hands : MonoBehaviour
     {
         _hands[handNumber].ObjectInHand = obj;
     }
-    
+
     public GameObject GetObjectInHand(int handNumber)
     {
         return _hands[handNumber].ObjectInHand;

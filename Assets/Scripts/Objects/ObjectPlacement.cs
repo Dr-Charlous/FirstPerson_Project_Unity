@@ -27,7 +27,7 @@ public class ObjectPlacement : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.Instance.IsGamePause)
+        if (!PlayerManager.Instance.UiManager.IsGamePause)
         {
             if (SubType == ObjectInfos.ObjectSubType.Fuse || SubType == ObjectInfos.ObjectSubType.Pipe || SubType == ObjectInfos.ObjectSubType.Rod)
                 BreakTypeUpdate();

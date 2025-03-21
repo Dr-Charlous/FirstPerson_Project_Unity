@@ -13,15 +13,15 @@ public class Interactions : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance != null && GameManager.Instance.IsGamePause)
+        if (PlayerManager.Instance.UiManager.IsGamePause)
             return;
 
-        if (PlayerComponentManager.Instance.Stats.IsDead)
+        if (PlayerManager.Instance.Stats.IsDead)
             return;
 
         RaycastHit hit;
 
-        if (PlayerComponentManager.Instance.PlayerInputs.Player.Eject.triggered && Hands.GetObjectInHand(0) != null)
+        if (PlayerManager.Instance.PlayerInputs.Player.Eject.triggered && Hands.GetObjectInHand(0) != null)
         {
             Hands.GetObjectInHand(0).GetComponent<ObjectsComponents>().Grab(null);
             Hands.LoseObjectInHand(0);
@@ -31,7 +31,7 @@ public class Interactions : MonoBehaviour
         Vector3 origin = transform.position;
         Debug.DrawLine(origin, origin + transform.TransformDirection(Vector3.forward) * _distance);
 
-        if (!PlayerComponentManager.Instance.Look.IsOnHead)
+        if (!PlayerManager.Instance.Look.IsOnHead)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -41,7 +41,7 @@ public class Interactions : MonoBehaviour
                 //Debug.Log(hit.point);
                 _obj.position = hit.point;
 
-                if (PlayerComponentManager.Instance.PlayerInputs.Player.Interact.triggered)
+                if (PlayerManager.Instance.PlayerInputs.Player.Interact.triggered)
                 {
                     //Interactibles/Radio/Panel
                     var inter = hit.transform.GetComponent<Interactible>();
@@ -68,12 +68,12 @@ public class Interactions : MonoBehaviour
             _obj.gameObject.SetActive(false);
 
             //Ray
-            if (Physics.Raycast(origin, transform.forward, out hit, _distance, _interactions) && PlayerComponentManager.Instance.Look.IsOnHead)
+            if (Physics.Raycast(origin, transform.forward, out hit, _distance, _interactions) && PlayerManager.Instance.Look.IsOnHead)
             {
                 if (_uiText != null)
                     _uiText.SetActive(true);
 
-                if (PlayerComponentManager.Instance.PlayerInputs.Player.Interact.triggered)
+                if (PlayerManager.Instance.PlayerInputs.Player.Interact.triggered)
                 {
                     //Doors/Objects/Objects placement/Furnase/Panel
                     //var door = hit.transform.GetComponent<Doors>();
