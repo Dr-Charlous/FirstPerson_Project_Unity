@@ -5,7 +5,7 @@ public class Interactions : MonoBehaviour
     [Header("Parameters :")]
     [SerializeField] float _distance;
     [SerializeField] LayerMask _interactions;
-    [SerializeField] GameObject _uiText;
+    [SerializeField] GameObject _visualFeedBack;
     [SerializeField] Transform _obj;
 
     [Header("Hands :")]
@@ -60,8 +60,8 @@ public class Interactions : MonoBehaviour
                 }
             }
 
-            if (_uiText != null)
-                _uiText.SetActive(false);
+            if (_visualFeedBack != null)
+                _visualFeedBack.SetActive(false);
         }
         else
         {
@@ -70,8 +70,8 @@ public class Interactions : MonoBehaviour
             //Ray
             if (Physics.Raycast(origin, transform.forward, out hit, _distance, _interactions) && PlayerManager.Instance.Look.IsOnHead)
             {
-                if (_uiText != null)
-                    _uiText.SetActive(true);
+                if (_visualFeedBack != null)
+                    _visualFeedBack.SetActive(true);
 
                 if (PlayerManager.Instance.PlayerInputs.Player.Interact.triggered)
                 {
@@ -102,8 +102,8 @@ public class Interactions : MonoBehaviour
             }
             else
             {
-                if (_uiText != null)
-                    _uiText.SetActive(false);
+                if (_visualFeedBack != null)
+                    _visualFeedBack.SetActive(false);
             }
         }
 

@@ -33,7 +33,8 @@ public class DialogueManager : MonoBehaviour
                 NextDialogue();
             }
         }
-        //else if (Input.GetMouseButtonDown(1))     //Input exemple call dialog
+        
+        //if (Input.GetMouseButtonDown(1))     //Input exemple call dialog
         //{
         //    UpdateDialogue(_dialogue);
         //}

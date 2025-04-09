@@ -43,7 +43,7 @@ public class UiManager : MonoBehaviour
             if (!IsGamePause)
             {
                 _time += Time.deltaTime;
-                _uiTimer.text = "Time : " + (int)_time;
+                _uiTimer.text = "Time : " + (int)_time + "s";
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))

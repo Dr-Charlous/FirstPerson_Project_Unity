@@ -12,11 +12,9 @@ public class MouseLook : MonoBehaviour
     [Range(0f, 0.5f)]
     [Tooltip("When changing pos")]
     public float CamSpeedSensitivity = 0.1f;
-
     public bool IsOnHead = true;
 
     [SerializeField] Transform _playerBody;
-
     float _xRotation = 0f;
 
     void Start()

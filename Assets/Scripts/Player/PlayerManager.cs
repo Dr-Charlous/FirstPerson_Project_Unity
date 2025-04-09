@@ -31,7 +31,6 @@ public class PlayerManager : MonoBehaviour
     public Hands Hands;
 
     public MouseLook Look;
-    public CharacterAnimation Animation;
     public CameraShake Shake;
 
     public Interactions Interactions;
