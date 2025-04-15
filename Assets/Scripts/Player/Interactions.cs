@@ -75,29 +75,29 @@ public class Interactions : MonoBehaviour
 
                 if (PlayerManager.Instance.PlayerInputs.Player.Interact.triggered)
                 {
-                    //Doors/Objects/Objects placement/Furnase/Panel
-                    //var door = hit.transform.GetComponent<Doors>();
                     var obj = hit.transform.GetComponent<ObjectsComponents>();
                     var place = hit.transform.GetComponent<ObjectPlacement>();
+                    var interact = hit.transform.GetComponent<Interactible>();
+                    //Doors/Objects/Objects placement/Furnase/Panel
+                    //var door = hit.transform.GetComponent<Doors>();
                     //var furnase = hit.transform.GetComponent<Furnase>();
                     //var panel = hit.transform.GetComponent<ControlPanel>();
                     //var bed = hit.transform.GetComponent<Bed>();
-                    var interact = hit.transform.GetComponent<Interactible>();
 
-                    //if (door != null)
-                    //    door.DoorInt.OnAction(door, Hands);
                     if (obj != null)
                         obj.ObjInt.OnAction(obj, Hands);
-                    else if (place != null)
+                    if (place != null)
                         place.PlacementInt.OnAction(place, Hands);
+                    if (interact != null && interact.IsActivableOut)
+                        interact.ChangeTarget();
+                    //if (door != null)
+                    //    door.DoorInt.OnAction(door, Hands);
                     //else if (furnase != null)
                     //    furnase.FurnaseInt.OnAction(furnase, Hands);
                     //else if (panel != null)
                     //    panel.PanelInt.OnAction(panel, Hands);
                     //else if (bed != null)
                     //    bed.PanelInt.OnAction(bed, Hands);
-                    else if (interact != null && interact.IsActivableOut)
-                        interact.ChangeTarget();
                 }
             }
             else
@@ -113,7 +113,6 @@ public class Interactions : MonoBehaviour
     //private void OnDrawGizmos()
     //{
     //    Gizmos.color = Color.blue;
-
     //    Gizmos.DrawLine(transform.position, transform.position + transform.TransformDirection(Vector3.forward) * _distance);
     //}
 }

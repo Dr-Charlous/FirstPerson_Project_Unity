@@ -328,7 +328,7 @@ public partial class @CharaControl: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""4c8c0a15-4167-4125-8903-5f6380dce492"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

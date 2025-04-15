@@ -28,7 +28,7 @@ public class Hands : MonoBehaviour
 
         for (int i = 0; i < _hands.Length; i++)
         {
-            if (_hands[i].ArmMeshTransform != null) //Need IK for next step
+            if (_hands[i].ArmMeshTransform != null) //Need IK for next step, now root arm rotate only
             {
                 //_hands[i].ArmMeshTransform.position = Vector3.Lerp(_hands[i].ArmMeshTransform.position, transform.position, _lerpDelay);
                 _hands[i].ArmMeshTransform.rotation = Quaternion.Lerp(_hands[i].ArmMeshTransform.rotation, transform.rotation, _lerpDelay);

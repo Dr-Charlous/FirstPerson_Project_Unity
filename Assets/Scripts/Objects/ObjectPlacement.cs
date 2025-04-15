@@ -18,7 +18,7 @@ public class ObjectPlacement : MonoBehaviour
 
     private void Start()
     {
-        if (SubType == ObjectInfos.ObjectSubType.Fuse || SubType == ObjectInfos.ObjectSubType.Pipe || SubType == ObjectInfos.ObjectSubType.Rod)
+        if (SubType == ObjectInfos.ObjectSubType.Weapon || SubType == ObjectInfos.ObjectSubType.Other)
             BreakTypeStart();
 
         if (SubType == ObjectInfos.ObjectSubType.Fuel)
@@ -29,7 +29,7 @@ public class ObjectPlacement : MonoBehaviour
     {
         if (!PlayerManager.Instance.UiManager.IsGamePause)
         {
-            if (SubType == ObjectInfos.ObjectSubType.Fuse || SubType == ObjectInfos.ObjectSubType.Pipe || SubType == ObjectInfos.ObjectSubType.Rod)
+            if (SubType == ObjectInfos.ObjectSubType.Weapon || SubType == ObjectInfos.ObjectSubType.Other)
                 BreakTypeUpdate();
 
             if (SubType == ObjectInfos.ObjectSubType.Fuel)
@@ -39,7 +39,7 @@ public class ObjectPlacement : MonoBehaviour
 
     public void Repair()
     {
-        if (SubType == ObjectInfos.ObjectSubType.Fuse || SubType == ObjectInfos.ObjectSubType.Pipe || SubType == ObjectInfos.ObjectSubType.Rod)
+        if (SubType == ObjectInfos.ObjectSubType.Weapon || SubType == ObjectInfos.ObjectSubType.Other)
             BreakRepair();
 
         if (SubType == ObjectInfos.ObjectSubType.Fuel)
@@ -49,16 +49,7 @@ public class ObjectPlacement : MonoBehaviour
     #region BreakType
     void BreakTypeStart()
     {
-        if (IsMeshDisplayOnRepair)
-        {
-            _objectMeshReference.SetActive(true);
-            _particuleEffect.SetActive(false);
-        }
-        else
-        {
-            _objectMeshReference.SetActive(false);
-            _particuleEffect.SetActive(true);
-        }
+        DisplayRepair();
 
         _timerTarget = _breakTimer + Random.Range(_breakTimerRandomRange.x, _breakTimerRandomRange.y);
     }
@@ -70,16 +61,7 @@ public class ObjectPlacement : MonoBehaviour
             IsBreak = true;
             IsReplace = false;
 
-            if (IsMeshDisplayOnRepair)
-            {
-                _objectMeshReference.SetActive(false);
-                _particuleEffect.SetActive(true);
-            }
-            else
-            {
-                _objectMeshReference.SetActive(true);
-                _particuleEffect.SetActive(false);
-            }
+            DisplayRepair();
         }
         else
             _timer += Time.deltaTime;
@@ -94,13 +76,35 @@ public class ObjectPlacement : MonoBehaviour
 
         if (IsMeshDisplayOnRepair)
         {
-            _objectMeshReference.SetActive(true);
-            _particuleEffect.SetActive(false);
+            if (_objectMeshReference != null)
+                _objectMeshReference.SetActive(true);
+            if (_particuleEffect != null)
+                _particuleEffect.SetActive(false);
         }
         else
         {
-            _objectMeshReference.SetActive(false);
-            _particuleEffect.SetActive(true);
+            if (_objectMeshReference != null)
+                _objectMeshReference.SetActive(false);
+            if (_particuleEffect != null)
+                _particuleEffect.SetActive(true);
+        }
+    }
+
+    void DisplayRepair()
+    {
+        if (IsMeshDisplayOnRepair)
+        {
+            if (_objectMeshReference != null)
+                _objectMeshReference.SetActive(false);
+            if (_particuleEffect != null)
+                _particuleEffect.SetActive(true);
+        }
+        else
+        {
+            if (_objectMeshReference != null)
+                _objectMeshReference.SetActive(true);
+            if (_particuleEffect != null)
+                _particuleEffect.SetActive(false);
         }
     }
     #endregion
@@ -110,8 +114,12 @@ public class ObjectPlacement : MonoBehaviour
     {
         IsBreak = false;
         IsReplace = false;
-        _objectMeshReference.SetActive(true);
-        _particuleEffect.SetActive(true);
+
+        if (_objectMeshReference != null)
+            _objectMeshReference.SetActive(true);
+        if (_particuleEffect != null)
+            _particuleEffect.SetActive(true);
+
         _timerTarget = _breakTimer + _breakTimerRandomRange.y;
     }
 
